@@ -11,6 +11,13 @@ Prototipo desarrollado para el **Hacktoberfest Hack Day La Paz × NeuroTech UMSA
 
 ---
 
+## 🎯 Retos y Categorías del Hackathon
+Este proyecto postula formalmente a las siguientes categorías oficiales del evento:
+1. **Best Open-Source AI Project (DigitalOcean):** Uso de tecnologías de código abierto y arquitectura modular para democratizar herramientas de evaluación cognitiva educativa.
+2. **Best Use of Gemma 4 (Google):** Integración conceptual de modelos de la familia Gemma / Gemini para estructurar perfiles de aprendizaje personalizados y orientaciones pedagógicas éticas.
+
+---
+
 ## 🛠️ Arquitectura y Stack Tecnológico
 El prototipo está construido como una **SPA (Single Page Application)** autocontenida y optimizada para ejecución inmediata:
 * **Frontend:** HTML5, CSS3 (Diseño Accesible WCAG 2.1 AA) y JavaScript Nativo (Vanilla JS).
@@ -33,9 +40,8 @@ Para cumplir con el rigor científico y ético requerido en el hackathon, distin
 ---
 
 ## 🚀 Guía de Instalación y Ejecución Local
-
 No requiere instalación de dependencias, Node.js ni compilación previa.
 
 1. Clona el repositorio o descarga el archivo fuente:
    ```bash
-   git clone [https://github.com/tu-usuario/neuroinclude-bolivia.git](https://github.com/tu-usuario/neuroinclude-bolivia.git)
+   git clone [https://github.com/AlejandraCordero/neuroinclude.git](https://github.com/AlejandraCordero/neuroinclude.git)
