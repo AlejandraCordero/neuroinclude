@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEUROINCLUDE | Exploración Neurocognitiva Inclusiva</title>
+  <meta name="description" content="Plataforma de neurotecnología inclusiva para explorar fortalezas neurocognitivas y estrategias de aprendizaje personalizadas.">
+  <style>
+    /* ==========================================================================
+       VARIABLES Y TEMA VISUAL (Accesibilidad y Contraste WCAG AA)
+       ========================================================================== */
+    :root {
+      --bg-main: #0B0F19;
+      --bg-surface: #141C2E;
+      --bg-card: #1D263B;
+      --bg-card-hover: #26334D;
+      --primary: #4F46E5;
+      --primary-light: #6366F1;
+      --cyan: #06B6D4;
+      --cyan-soft: rgba(6, 182, 212, 0.15);
+      --violet: #8B5CF6;
+      --text-main: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --text-dim: #6B7280;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --border: rgba(255, 255, 255, 0.1);
+      --focus-ring: #38BDF8;
+      --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Accesibilidad: Foco visible */
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 3px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    /* ==========================================================================
+       HEADER Y NAVEGACIÓN
+       ========================================================================== */
+    header {
+      background: rgba(20, 28, 46, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--cyan), var(--primary));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      background: linear-gradient(90deg, #FFFFFF, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 0.5rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: var(--bg-card);
+      color: var(--text-main);
+    }
+
+    .nav-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary-light);
+    }
+
+    /* ==========================================================================
+       CONTENEDOR PRINCIPAL Y VISTAS
+       ========================================================================== */
+    main {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .view-section {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================================================
+       COMPONENTES REUTILIZABLES
+       ========================================================================== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-demo {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .badge-real {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .badge-info {
+      background: var(--cyan-soft);
+      color: var(--cyan);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--violet));
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .disclaimer-banner {
+      background: rgba(99, 102, 241, 0.1);
+      border-left: 4px solid var(--primary-light);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      color: #E0E7FF;
+    }
+
+    .notice-critical {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid var(--danger);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      color: #FEE2E2;
+    }
+
+    /* ==========================================================================
+       VISTA A: INICIO Y PRESENTACIÓN
+       ========================================================================== */
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+    }
+
+    .hero h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, #FFFFFF, var(--cyan), #A78BFA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p.tagline {
+      font-size: 1.25rem;
+      color: var(--cyan);
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero p.description {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 2rem;
+    }
+
+    .journey-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin: 2.5rem 0;
+    }
+
+    .journey-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: left;
+    }
+
+    .journey-step {
+      font-size: 0.75rem;
+      color: var(--cyan);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ==========================================================================
+       VISTA B: CONSENTIMIENTO Y PRIVACIDAD
+       ========================================================================== */
+    .consent-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      max-height: 240px;
+      overflow-y: auto;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      cursor: pointer;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .checkbox-label input {
+      margin-top: 0.25rem;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       VISTA C: ACTIVIDADES COGNITIVAS
+       ========================================================================== */
+    .task-container {
+      background: var(--bg-surface);
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 2rem;
+      user-select: none;
+    }
+
+    .stimulus-display {
+      font-size: 5rem;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .grid-memory {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      gap: 12px;
+      margin: 1.5rem 0;
+    }
+
+    .memory-tile {
+      width: 80px;
+      height: 80px;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .memory-tile.active-flash {
+      background: var(--cyan);
+      box-shadow: 0 0 15px var(--cyan);
+      border-color: #fff;
+    }
+
+    /* ==========================================================================
+       VISTA D: LABORATORIO EEG
+       ========================================================================== */
+    .eeg-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 800px) {
+      .eeg-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    canvas#eegCanvas {
+      width: 100%;
+      height: 240px;
+      background: #070A10;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .channel-legend {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .band-meter {
+      margin-bottom: 0.75rem;
+    }
+
+    .band-meter-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .meter-bar {
+      height: 8px;
+      background: var(--bg-surface);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--primary));
+      transition: width 0.3s;
+    }
+
+    /* ==========================================================================
+       VISTA E: PERFIL NEUROCOGNITIVO
+       ========================================================================== */
+    .profile-section {
+      margin-bottom: 1.5rem;
+      padding: 1.25rem;
+      border-radius: 8px;
+      background: var(--bg-surface);
+      border-left: 4px solid var(--cyan);
+    }
+
+    .profile-section h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .provenance-tag {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* ==========================================================================
+       VISTA G: PLAN DE DESARROLLO
+       ========================================================================== */
+    .goal-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    footer {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <div class="logo-icon" aria-hidden="true">NI</div>
+      <div>
+        <div class="brand-title">NEUROINCLUDE</div>
+      </div>
+    </div>
+    <nav role="navigation" aria-label="Navegación principal">
+      <button class="nav-btn active" data-target="view-welcome">Inicio</button>
+      <button class="nav-btn" data-target="view-consent">Consentimiento</button>
+      <button class="nav-btn" data-target="view-tasks">Exploración</button>
+      <button class="nav-btn" data-target="view-eeg">Laboratorio EEG</button>
+      <button class="nav-btn" data-target="view-profile">Mi Perfil</button>
+      <button class="nav-btn" data-target="view-plan">Mi Plan</button>
+      <button class="nav-btn" data-target="view-guidance">Orientación</button>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="app-root">
+
+    <!-- ======================================================================
+         MODULO A: INICIO Y PRESENTACIÓN
+         ====================================================================== -->
+    <section id="view-welcome" class="view-section active" aria-labelledby="hero-title">
+      <div class="hero">
+        <span class="badge badge-info" style="margin-bottom: 1rem;">Hackathon Prototype • Social Impact Bolivia</span>
+        <h1 id="hero-title">Discover your brain.<br>Understand your strengths.<br>Develop your potential.</h1>
+        <p class="tagline">Neurotecnología e Inteligencia Artificial para la Inclusión Educativa</p>
+        <p class="description">
+          Una plataforma científica y accesible para explorar tus patrones individuales de atención, memoria y comodidad sensorial. 
+          Rechazamos visiones deficitarias: <strong>no buscamos qué está mal en tu cerebro</strong>, sino cómo aprendes mejor.
+        </p>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="app.navigateTo('view-consent')">Explorar mi perfil</button>
+          <button class="btn btn-secondary" onclick="app.navigateTo('view-eeg')">Ver Laboratorio EEG Demo</button>
+        </div>
+      </div>
+
+      <div class="disclaimer-banner" role="note">
+        <strong>Principio de Transparencia y Límites Éticos:</strong> NEUROINCLUDE es un prototipo experimental neuroeducativo. 
+        <strong>NO diagnostica ni descarta autismo, TDAH, dislexia o condición clínica alguna.</strong> 
+        El EEG y las pruebas conductuales reflejan dinámicas específicas en tareas controladas y no deben usarse como pruebas de clasificación o exclusión.
+      </div>
+
+      <div class="journey-grid">
+        <div class="journey-card">
+          <div class="journey-step">Fase 1</div>
+          <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Conócete</h3>
+          <p style="font-size: 0.875rem; color: var(--text-muted);">Comprende tus preferencias sensoriales y condiciones en las que rindes con mayor calma.</p>
+        </div>
+        <div class="journey-card">
+          <div class="journey-step">Fase 2</div>
+          <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Experimenta</h3>
+          <p style="font-size: 0.875rem; color: var(--text-muted);">Interactúa con paradigmas de atención continua y memoria de trabajo con registro objetivo.</p>
+        </div>
+        <div class="journey-card">
+          <div class="journey-step">Fase 3</div>
+          <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Comprende</h3>
+          <p style="font-size: 0.875rem; color: var(--text-muted);">Visualiza señales EEG sintéticas/reales e interpreta tus tiempos de respuesta sin patologización.</p>
+        </div>
+        <div class="journey-card">
+          <div class="journey-step">Fase 4</div>
+          <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Desarrolla</h3>
+          <p style="font-size: 0.875rem; color: var(--text-muted);">Construye un plan de acción práctico con adaptaciones educativas y hábitos personalizados.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         MODULO B: CONSENTIMIENTO Y PRIVACIDAD
+         ====================================================================== -->
+    <section id="view-consent" class="view-section" aria-labelledby="consent-title">
+      <div class="card">
+        <h2 id="consent-title" style="margin-bottom: 1rem;">Consentimiento Informado y Protección de Datos</h2>
+        <div class="consent-box" tabindex="0" role="region" aria-label="Términos de consentimiento informado">
+          <p><strong>1. Propósito:</strong> NEUROINCLUDE tiene fines de divulgación científica, autoconocimiento neurocognitivo y exploración de estrategias de estudio para el contexto boliviano e internacional.</p><br>
+          <p><strong>2. Naturaleza Experimental:</strong> Las tareas interactivas registran tiempos de reacción en milisegundos y precisión. El módulo de electroencefalografía (EEG) en esta versión funciona en <strong>modo demostración con señales sintéticas rigurosamente modeladas</strong>.</p><br>
+          <p><strong>3. Privacidad y Soberanía de Datos:</strong> No solicitamos tu nombre real, número de carnet de identidad, teléfono ni expediente de salud. Tu sesión utiliza una clave aleatoria efímera generada en tu navegador (UUID). Ningún dato de señal se comparte con servidores de terceros sin tu autorización expresa.</p><br>
+          <p><strong>4. Voluntariedad y Control:</strong> Puedes omitir ejercicios, detener las actividades o borrar tus datos locales en cualquier instante pulsando el botón "Reiniciar Sesión".</p><br>
+          <p><strong>5. Ausencia de Diagnóstico:</strong> Se reitera que los resultados no constituyen diagnóstico médico, psiquiátrico o neuropsicológico.</p>
+        </div>
+
+        <label class="checkbox-label">
+          <input type="checkbox" id="consent-checkbox" onchange="app.toggleConsent(this.checked)">
+          <span>He leído, comprendo los alcances experimentales y acepto participar voluntariamente en esta sesión anónima.</span>
+        </label>
+
+        <div style="display: flex; gap: 1rem;">
+          <button id="btn-start-tasks" class="btn btn-primary" disabled onclick="app.navigateTo('view-tasks')">Comenzar Exploración</button>
+          <button class="btn btn-secondary" onclick="app.loadSyntheticProfileDemo()">Cargar Perfil Demo Predefinido</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         MODULO C: BATERÍA DE EXPLORACIÓN NEUROCOGNITIVA
+         ====================================================================== -->
+    <section id="view-tasks" class="view-section" aria-labelledby="tasks-title">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <h2 id="tasks-title">Batería de Pruebas Conductuales</h2>
+          <span class="badge badge-real">Medición Directa en Vivo</span>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+          Estas actividades miden índices conductuales específicos (latencia de respuesta y span de memoria de trabajo). 
+          No representan tu inteligencia general ni definen tus capacidades absolutas.
+        </p>
+
+        <!-- Selector de tarea -->
+        <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem;">
+          <button class="btn btn-secondary" id="tab-task-attention" onclick="app.switchTask('attention')">Tarea 1: Atención Sostenida (Go/No-Go)</button>
+          <button class="btn btn-secondary" id="tab-task-memory" onclick="app.switchTask('memory')">Tarea 2: Memoria de Trabajo Secuencial</button>
+        </div>
+
+        <!-- SUB-TAREA 1: ATENCIÓN GO / NO-GO -->
+        <div id="task-attention-panel">
+          <div style="background: var(--bg-surface); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;">
+            <strong>Instrucciones:</strong> Aparecerán símbolos en pantalla. 
+            Presiona el botón <strong>"¡RESPUESTA!"</strong> (o pulsa la <em>Barra Espaciadora</em>) 
+            <strong>ÚNICAMENTE cuando veas la ESTRELLA (⭐)</strong>. Ignora los demás símbolos (▲, ⬛).
+            La prueba dura 20 ensayos breves.
+          </div>
+
+          <div class="task-container" id="attention-stage">
+            <div id="attention-stimulus" class="stimulus-display" aria-live="polite">⭐</div>
+            <p id="attention-hint" style="color: var(--text-muted); margin-top: 1rem;">Presiona "Comenzar Tarea" cuando estés listo/a.</p>
+          </div>
+
+          <div style="margin-top: 1.25rem; display: flex; gap: 1rem; align-items: center;">
+            <button id="btn-run-attention" class="btn btn-primary" onclick="app.runAttentionTask()">Comenzar Tarea de Atención</button>
+            <button id="btn-action-attention" class="btn btn-secondary" style="font-size: 1.1rem; padding: 0.75rem 2rem;" disabled onclick="app.recordAttentionResponse()">¡RESPUESTA! (Espacio)</button>
+          </div>
+
+          <div id="attention-live-metrics" style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); display: none;">
+            Ensayos: <span id="att-trial-count">0</span>/20 | Aciertos: <span id="att-hits">0</span> | Falsas Alarmas: <span id="att-fa">0</span>
+          </div>
+        </div>
+
+        <!-- SUB-TAREA 2: MEMORIA DE TRABAJO VISOESPACIAL -->
+        <div id="task-memory-panel" style="display: none;">
+          <div style="background: var(--bg-surface); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;">
+            <strong>Instrucciones:</strong> Observa atentamente la secuencia de casillas que se iluminarán en cian. 
+            Cuando terminen de encenderse, reprodúcelas haciendo clic en las casillas en el mismo orden.
+          </div>
+
+          <div class="task-container">
+            <p id="memory-status" style="margin-bottom: 0.5rem; color: var(--cyan); font-weight: 600;">Secuencia: Nivel 3 elementos</p>
+            <div class="grid-memory" id="memory-grid">
+              <div class="memory-tile" data-index="0" onclick="app.handleMemoryTileClick(0)"></div>
+              <div class="memory-tile" data-index="1" onclick="app.handleMemoryTileClick(1)"></div>
+              <div class="memory-tile" data-index="2" onclick="app.handleMemoryTileClick(2)"></div>
+              <div class="memory-tile" data-index="3" onclick="app.handleMemoryTileClick(3)"></div>
+              <div class="memory-tile" data-index="4" onclick="app.handleMemoryTileClick(4)"></div>
+              <div class="memory-tile" data-index="5" onclick="app.handleMemoryTileClick(5)"></div>
+              <div class="memory-tile" data-index="6" onclick="app.handleMemoryTileClick(6)"></div>
+              <div class="memory-tile" data-index="7" onclick="app.handleMemoryTileClick(7)"></div>
+              <div class="memory-tile" data-index="8" onclick="app.handleMemoryTileClick(8)"></div>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.25rem; display: flex; gap: 1rem;">
+            <button id="btn-start-memory" class="btn btn-primary" onclick="app.startMemorySequence()">Iniciar Secuencia</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         MODULO D: LABORATORIO EEG
+         ====================================================================== -->
+    <section id="view-eeg" class="view-section" aria-labelledby="eeg-title">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <h2 id="eeg-title">Laboratorio de Señales EEG</h2>
+          <span class="badge badge-demo">Modo Demostración: Datos Sintéticos</span>
+        </div>
+
+        <div class="disclaimer-banner" style="margin-bottom: 1rem;">
+          <strong>Transparencia Técnica Obligatoria:</strong> Los trazados presentados en esta pantalla son 
+          <strong>señales sintéticas calculadas algorítmicamente</strong> mediante modelos oscilatorios basados en funciones senoidales con modulación gaussiana y ruido rosa (1/f). No provienen de electrodos conectados a tu cuerpo.
+        </div>
+
+        <div class="eeg-grid">
+          <div>
+            <!-- Osciloscopio 4 canales -->
+            <canvas id="eegCanvas" width="600" height="240" role="img" aria-label="Visualizador temporal de ondas EEG en tiempo real"></canvas>
+            <div class="channel-legend">
+              <span style="color: #38BDF8;">● Canal 1 (Fp1 - Frontal Izq)</span>
+              <span style="color: #818CF8;">● Canal 2 (Fp2 - Frontal Der)</span>
+              <span style="color: #34D399;">● Canal 3 (C3 - Central Izq)</span>
+              <span style="color: #F472B6;">● Canal 4 (C4 - Central Der)</span>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <button class="btn btn-secondary" onclick="app.setEEGMode('rest')">Condición: Reposo (Ojos Abiertos)</button>
+              <button class="btn btn-secondary" onclick="app.setEEGMode('focus')">Condición: Carga Cognitiva</button>
+              <button class="btn btn-secondary" onclick="app.setEEGMode('artifact')">Simular Artefacto Muscular (Parpadeo)</button>
+            </div>
+          </div>
+
+          <!-- Potencia Espectral Relativa -->
+          <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: 8px;">
+            <h4 style="margin-bottom: 1rem; font-size: 0.95rem;">Densidad Espectral Estimada (PSD)</h4>
+            
+            <div class="band-meter">
+              <div class="band-meter-header">
+                <span>Delta (0.5 - 4 Hz)</span>
+                <span id="p-delta">18%</span>
+              </div>
+              <div class="meter-bar"><div class="meter-fill" id="bar-delta" style="width: 18%;"></div></div>
+            </div>
+
+            <div class="band-meter">
+              <div class="band-meter-header">
+                <span>Theta (4 - 8 Hz)</span>
+                <span id="p-theta">24%</span>
+              </div>
+              <div class="meter-bar"><div class="meter-fill" id="bar-theta" style="width: 24%;"></div></div>
+            </div>
+
+            <div class="band-meter">
+              <div class="band-meter-header">
+                <span>Alfa (8 - 12 Hz)</span>
+                <span id="p-alpha">38%</span>
+              </div>
+              <div class="meter-bar"><div class="meter-fill" id="bar-alpha" style="width: 38%;"></div></div>
+            </div>
+
+            <div class="band-meter">
+              <div class="band-meter-header">
+                <span>Beta (12 - 30 Hz)</span>
+                <span id="p-beta">20%</span>
+              </div>
+              <div class="meter-bar"><div class="meter-fill" id="bar-beta" style="width: 20%;"></div></div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 1rem;">
+              Muestreo equivalente: 250 Hz. Filtro pasabanda: 0.5 - 35 Hz. Notch: 50 Hz.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         MODULO E: PERFIL NEUROCOGNITIVO PERSONALIZADO
+         ====================================================================== -->
+    <section id="view-profile" class="view-section" aria-labelledby="profile-title">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2 id="profile-title">Tu Perfil Neurocognitivo Exploratorio</h2>
+          <span class="badge badge-info">ID Sesión: <span id="session-badge">ANON-LOCAL</span></span>
+        </div>
+        
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+          Este resumen sintetiza tus mediciones conductuales directas y tus respuestas autorreportadas. 
+          Está diseñado para identificar herramientas prácticas para tus estudios y vida diaria, no para encasillarte.
+        </p>
+
+        <!-- Fortalezas -->
+        <div class="profile-section" style="border-left-color: var(--success);">
+          <h3>
+            <span>1. Mis Fortalezas Observadas</span>
+            <span class="provenance-tag">Procedencia: Batería Conductual</span>
+          </h3>
+          <ul id="profile-strengths-list" style="padding-left: 1.25rem; margin-top: 0.5rem; font-size: 0.95rem;">
+            <li>Realiza las actividades para visualizar tus fortalezas identificadas.</li>
+          </ul>
+        </div>
+
+        <!-- Áreas de Apoyo -->
+        <div class="profile-section" style="border-left-color: var(--warning);">
+          <h3>
+            <span>2. Áreas para Probar Estrategias de Apoyo</span>
+            <span class="provenance-tag">Procedencia: Latencia y Precisión</span>
+          </h3>
+          <ul id="profile-support-list" style="padding-left: 1.25rem; margin-top: 0.5rem; font-size: 0.95rem;">
+            <li>Completa la exploración para descubrir áreas de optimización.</li>
+          </ul>
+        </div>
+
+        <!-- Perfil Sensorial -->
+        <div class="profile-section" style="border-left-color: var(--violet);">
+          <h3>
+            <span>3. Experiencia y Entorno Sensorial</span>
+            <span class="provenance-tag">Procedencia: Autorreporte</span>
+          </h3>
+          <p id="profile-sensory-desc" style="font-size: 0.95rem;">
+            Se favorecen entornos con iluminación suave, baja contaminación auditiva y alternancia regular de pausas motoras.
+          </p>
+        </div>
+
+        <!-- Síntesis con IA Ética -->
+        <div class="card" style="background: rgba(79, 70, 229, 0.08); border-color: rgba(99, 102, 241, 0.3);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span style="font-size: 1.2rem;">✨</span>
+            <h4 style="font-size: 1rem; color: #C7D2FE;">Síntesis Asistida por IA (Modelo con Restricciones Éticas)</h4>
+          </div>
+          <p id="ai-synthesis-text" style="font-size: 0.9rem; color: #E0E7FF; line-height: 1.5;">
+            El motor de inferencia estructurado organizará tus hallazgos sin emitir juicios clínicos en cuanto finalices tus pruebas.
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+          <button class="btn btn-primary" onclick="app.navigateTo('view-plan')">Ir a mi Plan de Acción</button>
+          <button class="btn btn-secondary" onclick="window.print()">Imprimir / Guardar en PDF</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         MODULO F y G: RECOMENDACIONES Y PLAN DE DESARROLLO
+         ====================================================================== -->
+    <section id="view-plan" class="view-section" aria-labelledby="plan-title">
+      <div class="card">
+        <h2 id="plan-title" style="margin-bottom: 0.5rem;">Mi Plan de Desarrollo y Aprendizaje</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+          Selecciona o edita objetivos concretos para tu rutina de estudio o trabajo. Sin metas impuestas ni comparaciones competitivas.
+        </p>
+
+        <div id="goals-container">
+          <div class="goal-item">
+            <input type="checkbox" id="g1" style="margin-top: 0.25rem;">
+            <div>
+              <label for="g1" style="font-weight: 600;">Estructuración en Bloques Breves (Técnica Pomodoro Adaptada)</label>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                <strong>Qué se propone:</strong> Trabajar en lapsos de 20 minutos con descansos sensoriales de 5 minutos.<br>
+                <strong>Por qué podría ayudar:</strong> Reduce la fatiga atencional sostenida observada en tareas de alta carga.<br>
+                <strong>Cómo evaluar si funciona:</strong> Monitorea al final de la semana si disminuyó tu sensación de agotamiento mental.
+              </p>
+            </div>
+          </div>
+
+          <div class="goal-item">
+            <input type="checkbox" id="g2" style="margin-top: 0.25rem;">
+            <div>
+              <label for="g2" style="font-weight: 600;">Andamiaje Visoespacial para la Memoria de Trabajo</label>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                <strong>Qué se propone:</strong> Convertir listas abstractas en esquemas gráficos o notas adhesivas con colores.<br>
+                <strong>Por qué podría ayudar:</strong> Disminuye la demanda inmediata sobre el bucle fonológico y la memoria operativa.<br>
+                <strong>Alternativa si no resulta:</strong> Emplear grabaciones de voz breves como recordatorios auditivos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reflexión guiada -->
+        <div style="margin-top: 1.5rem; background: var(--bg-surface); padding: 1.25rem; border-radius: 8px;">
+          <h4 style="margin-bottom: 0.5rem; font-size: 0.95rem;">Espacio de Reflexión Autónoma</h4>
+          <label for="reflection-text" style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">
+            ¿Qué adaptaciones ambientales te ayudaron a concentrarte mejor hoy?
+          </label>
+          <textarea id="reflection-text" rows="3" style="width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem; color: var(--text-main); font-family: inherit; resize: vertical;" placeholder="Ejemplo: Usar audífonos sin música me permitió concentrarme más rápido..."></textarea>
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+          <button class="btn btn-secondary" onclick="app.resetSession()">Reiniciar Sesión y Borrar Datos</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         MODULO H: ORIENTACIÓN PROFESIONAL RESPONSABLE
+         ====================================================================== -->
+    <section id="view-guidance" class="view-section" aria-labelledby="guidance-title">
+      <div class="card">
+        <h2 id="guidance-title" style="margin-bottom: 1rem;">Orientación Profesional y Red de Acompañamiento</h2>
+        
+        <div class="notice-critical">
+          <strong>Aviso de Cuidado y Rigor Clínico:</strong><br>
+          Si tú, tu hijo/a o una persona a la que acompañas experimenta dificultades persistentes en el colegio, la universidad, el empleo o el bienestar socioemocional, 
+          <strong>las aplicaciones tecnológicas no sustituyen una consulta integral</strong>.
+        </div>
+
+        <p style="margin-bottom: 1.25rem; font-size: 0.95rem; color: var(--text-muted);">
+          Un proceso diagnóstico riguroso en neurodesarrollo o neurodiversidad no se resuelve con un algoritmo ni con un EEG aislado. Requiere:
+        </p>
+
+        <ul style="padding-left: 1.5rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+          <li style="margin-bottom: 0.5rem;"><strong>Entrevistas clínicas estructuradas</strong> y revisión de la historia de desarrollo vital.</li>
+          <li style="margin-bottom: 0.5rem;"><strong>Evaluación neuropsicológica con pruebas baremadas</strong> y estandarizadas internacionalmente.</li>
+          <li style="margin-bottom: 0.5rem;"><strong>Observación contextual</strong> en el aula, el hogar y el entorno social.</li>
+          <li style="margin-bottom: 0.5rem;"><strong>Descarte interdisciplinario</strong> auditivo, visual, neurológico y metabólico.</li>
+        </ul>
+
+        <div class="card" style="background: var(--bg-surface);">
+          <h3 style="font-size: 1.05rem; margin-bottom: 0.5rem;">Recursos de Orientación en Bolivia</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+            En caso de requerir asesoramiento diagnóstico o apoyos psicopedagógicos formales, puedes acudir a centros especializados colegiados:
+          </p>
+          <ul style="padding-left: 1.25rem; font-size: 0.85rem; color: var(--text-muted);">
+            <li>Colegios Departamentales de Psicólogos (La Paz, Cochabamba, Santa Cruz, etc.).</li>
+            <li>Servicios Universitarios de Atención Psicológica y Psicopedagógica (UMSA, UCB, UMSS, UAGRM).</li>
+            <li>Sociedad Boliviana de Neurología y Pediatría para interconsultas médicas formales.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>NEUROINCLUDE © 2026 • Prototipo de Impacto Social para Hackathons • La Paz / Bolivia</p>
+    <p style="margin-top: 0.25rem; font-size: 0.75rem; color: var(--text-dim);">
+      Diseñado bajo los principios de Neurodiversidad, Ética de Datos, Transparencia Algorítmica y Accesibilidad Universal.
+    </p>
+  </footer>
+
+  <!-- ==========================================================================
+       LÓGICA JAVASCRIPT MODULAR Y ROBUSTA
+       ========================================================================== -->
+  <script>
+    /**
+     * NEUROINCLUDE CORE ENGINE (Vanilla JS Modular Architecture)
+     */
+    class NeuroIncludeApp {
+      constructor() {
+        this.state = {
+          consentAccepted: false,
+          activeTask: 'attention',
+          currentView: 'view-welcome',
+          sessionId: 'SES-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
+          // Métricas directas
+          attentionMetrics: {
+            trialsTotal: 20,
+            currentTrial: 0,
+            hits: 0,
+            falseAlarms: 0,
+            misses: 0,
+            reactionTimes: [],
+            isRunning: false
+          },
+          memoryMetrics: {
+            sequence: [],
+            userSequence: [],
+            level: 3,
+            maxSpanReached: 0,
+            isUserTurn: false
+          },
+          // EEG Simulator State
+          eeg: {
+            mode: 'rest', // 'rest', 'focus', 'artifact'
+            channels: 4,
+            samplingRate: 250,
+            phase: 0,
+            animationFrameId: null
+          }
+        };
+
+        this.initDOM();
+        this.initKeyboardListener();
+        this.initEEGSimulator();
+      }
+
+      initDOM() {
+        // Enlazar navegación
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const target = btn.getAttribute('data-target');
+            this.navigateTo(target);
+          });
+        });
+
+        // Etiqueta de sesión
+        const sessionBadge = document.getElementById('session-badge');
+        if (sessionBadge) sessionBadge.textContent = this.state.sessionId;
+      }
+
+      navigateTo(viewId) {
+        document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-target') === viewId);
+        });
+
+        const targetView = document.getElementById(viewId);
+        if (targetView) {
+          targetView.classList.add('active');
+          this.state.currentView = viewId;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+
+      toggleConsent(accepted) {
+        this.state.consentAccepted = accepted;
+        const btn = document.getElementById('btn-start-tasks');
+        if (btn) btn.disabled = !accepted;
+      }
+
+      switchTask(taskType) {
+        this.state.activeTask = taskType;
+        const attPanel = document.getElementById('task-attention-panel');
+        const memPanel = document.getElementById('task-memory-panel');
+        const tabAtt = document.getElementById('tab-task-attention');
+        const tabMem = document.getElementById('tab-task-memory');
+
+        if (taskType === 'attention') {
+          attPanel.style.display = 'block';
+          memPanel.style.display = 'none';
+          tabAtt.classList.add('btn-primary');
+          tabAtt.classList.remove('btn-secondary');
+          tabMem.classList.remove('btn-primary');
+          tabMem.classList.add('btn-secondary');
+        } else {
+          attPanel.style.display = 'none';
+          memPanel.style.display = 'block';
+          tabMem.classList.add('btn-primary');
+          tabMem.classList.remove('btn-secondary');
+          tabAtt.classList.remove('btn-primary');
+          tabAtt.classList.add('btn-secondary');
+        }
+      }
+
+      /* ------------------------------------------------------------------------
+         TAREA 1: ATENCIÓN SOSTENIDA (GO / NO-GO CONTINUOUS PERFORMANCE)
+         ------------------------------------------------------------------------ */
+      initKeyboardListener() {
+        window.addEventListener('keydown', (e) => {
+          if (e.code === 'Space' && this.state.attentionMetrics.isRunning) {
+            e.preventDefault();
+            this.recordAttentionResponse();
+          }
+        });
+      }
+
+      runAttentionTask() {
+        const m = this.state.attentionMetrics;
+        m.currentTrial = 0;
+        m.hits = 0;
+        m.falseAlarms = 0;
+        m.misses = 0;
+        m.reactionTimes = [];
+        m.isRunning = true;
+
+        document.getElementById('btn-run-attention').disabled = true;
+        document.getElementById('btn-action-attention').disabled = false;
+        document.getElementById('attention-live-metrics').style.display = 'block';
+        document.getElementById('attention-hint').textContent = '¡Atento a la ESTRELLA (⭐)! Presiona el botón al verla.';
+
+        this.nextAttentionTrial();
+      }
+
+      nextAttentionTrial() {
+        const m = this.state.attentionMetrics;
+        if (m.currentTrial >= m.trialsTotal) {
+          this.endAttentionTask();
+          return;
+        }
+
+        m.currentTrial++;
+        document.getElementById('att-trial-count').textContent = m.currentTrial;
+
+        const stimElem = document.getElementById('attention-stimulus');
+        stimElem.textContent = '+'; // Cruz de fijación central
+        stimElem.style.color = 'var(--text-muted)';
+        this.canRespond = false;
+        this.currentStimulusIsTarget = false;
+
+        // Intervalo interestímulo aleatorio (800ms - 1400ms) para evitar anticipación refleja
+        const isi = 800 + Math.random() * 600;
+
+        setTimeout(() => {
+          if (!m.isRunning) return;
+
+          // 70% probabilidad de Target (Go: ⭐), 30% No-Go (▲ o ⬛)
+          const isTarget = Math.random() < 0.70;
+          this.currentStimulusIsTarget = isTarget;
+          this.stimulusTimestamp = performance.now();
+          this.respondedInThisTrial = false;
+          this.canRespond = true;
+
+          if (isTarget) {
+            stimElem.textContent = '⭐';
+            stimElem.style.color = '#FCD34D';
+          } else {
+            stimElem.textContent = Math.random() < 0.5 ? '▲' : '⬛';
+            stimElem.style.color = '#9CA3AF';
+          }
+
+          // Ventana de respuesta: 900 ms
+          setTimeout(() => {
+            if (this.canRespond && !this.respondedInThisTrial && this.currentStimulusIsTarget) {
+              m.misses++;
+            }
+            this.canRespond = false;
+            if (m.isRunning) this.nextAttentionTrial();
+          }, 900);
+
+        }, isi);
+      }
+
+      recordAttentionResponse() {
+        const m = this.state.attentionMetrics;
+        if (!m.isRunning || !this.canRespond || this.respondedInThisTrial) return;
+
+        this.respondedInThisTrial = true;
+        const rt = Math.round(performance.now() - this.stimulusTimestamp);
+
+        if (this.currentStimulusIsTarget) {
+          m.hits++;
+          m.reactionTimes.push(rt);
+          document.getElementById('att-hits').textContent = m.hits;
+        } else {
+          m.falseAlarms++;
+          document.getElementById('att-fa').textContent = m.falseAlarms;
+        }
+      }
+
+      endAttentionTask() {
+        const m = this.state.attentionMetrics;
+        m.isRunning = false;
+        document.getElementById('btn-run-attention').disabled = false;
+        document.getElementById('btn-action-attention').disabled = true;
+        document.getElementById('attention-stimulus').textContent = '✓';
+        document.getElementById('attention-stimulus').style.color = 'var(--success)';
+        document.getElementById('attention-hint').textContent = '¡Tarea de atención completada!';
+
+        this.calculateAndRefreshProfile();
+      }
+
+      /* ------------------------------------------------------------------------
+         TAREA 2: MEMORIA DE TRABAJO VISOESPACIAL
+         ------------------------------------------------------------------------ */
+      startMemorySequence() {
+        const mem = this.state.memoryMetrics;
+        mem.userSequence = [];
+        mem.sequence = [];
+        document.getElementById('btn-start-memory').disabled = true;
+        document.getElementById('memory-status').textContent = `Preparando nivel ${mem.level} casillas...`;
+
+        // Generar secuencia no repetitiva consecutiva
+        for (let i = 0; i < mem.level; i++) {
+          let idx;
+          do {
+            idx = Math.floor(Math.random() * 9);
+          } while (i > 0 && idx === mem.sequence[i - 1]);
+          mem.sequence.push(idx);
+        }
+
+        // Reproducir patrón en pantalla
+        let step = 0;
+        const interval = setInterval(() => {
+          if (step >= mem.sequence.length) {
+            clearInterval(interval);
+            mem.isUserTurn = true;
+            document.getElementById('memory-status').textContent = '¡Tu turno! Reproduce la secuencia.';
+            return;
+          }
+
+          const tileIndex = mem.sequence[step];
+          this.flashTile(tileIndex);
+          step++;
+        }, 750);
+      }
+
+      flashTile(index) {
+        const tile = document.querySelector(`.memory-tile[data-index="${index}"]`);
+        if (!tile) return;
+        tile.classList.add('active-flash');
+        setTimeout(() => tile.classList.remove('active-flash'), 450);
+      }
+
+      handleMemoryTileClick(index) {
+        const mem = this.state.memoryMetrics;
+        if (!mem.isUserTurn) return;
+
+        this.flashTile(index);
+        mem.userSequence.push(index);
+
+        const currentStep = mem.userSequence.length - 1;
+        if (mem.userSequence[currentStep] !== mem.sequence[currentStep]) {
+          // Error en secuencia
+          mem.isUserTurn = false;
+          document.getElementById('memory-status').textContent = `Secuencia incorrecta. Tu span máximo registrado fue: ${mem.maxSpanReached} elementos.`;
+          document.getElementById('btn-start-memory').disabled = false;
+          this.calculateAndRefreshProfile();
+          return;
+        }
+
+        if (mem.userSequence.length === mem.sequence.length) {
+          // Nivel superado
+          mem.isUserTurn = false;
+          mem.maxSpanReached = mem.level;
+          mem.level++;
+          document.getElementById('memory-status').textContent = `¡Excelente! Nivel completado. Próximo nivel: ${mem.level} elementos.`;
+          document.getElementById('btn-start-memory').disabled = false;
+          this.calculateAndRefreshProfile();
+        }
+      }
+
+      /* ------------------------------------------------------------------------
+         LABORATORIO EEG: SIMULADOR DE ONDAS Y CÁLCULO DE PSD
+         ------------------------------------------------------------------------ */
+      initEEGSimulator() {
+        const canvas = document.getElementById('eegCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const colors = ['#38BDF8', '#818CF8', '#34D399', '#F472B6'];
+
+        const render = () => {
+          this.state.eeg.phase += 0.05;
+          ctx.fillStyle = '#070A10';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          const chHeight = canvas.height / this.state.eeg.channels;
+
+          for (let ch = 0; ch < this.state.eeg.channels; ch++) {
+            ctx.beginPath();
+            ctx.strokeStyle = colors[ch % colors.length];
+            ctx.lineWidth = 1.4;
+
+            const midY = (ch * chHeight) + (chHeight / 2);
+
+            for (let x = 0; x < canvas.width; x += 3) {
+              const t = (x * 0.04) + this.state.eeg.phase + (ch * 1.5);
+              
+              // Síntesis de ondas: componentes delta, theta, alpha, beta + ruido
+              let wave = 0;
+              if (this.state.eeg.mode === 'rest') {
+                // Dominancia Alfa (8-12 Hz)
+                wave = Math.sin(t * 2.5) * 12 + Math.sin(t * 0.8) * 6 + (Math.random() - 0.5) * 3;
+              } else if (this.state.eeg.mode === 'focus') {
+                // Desincronización alfa, predominio Beta (14-25 Hz)
+                wave = Math.sin(t * 5.2) * 9 + Math.sin(t * 1.8) * 4 + (Math.random() - 0.5) * 4;
+              } else if (this.state.eeg.mode === 'artifact') {
+                // Artefacto ocular/muscular de alta amplitud
+                wave = Math.sin(t * 0.4) * 28 + (Math.random() - 0.5) * 12;
+              }
+
+              const y = midY + wave;
+              if (x === 0) ctx.moveTo(x, y);
+              else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+          }
+
+          this.state.eeg.animationFrameId = requestAnimationFrame(render);
+        };
+
+        render();
+      }
+
+      setEEGMode(mode) {
+        this.state.eeg.mode = mode;
+        const d = document.getElementById('bar-delta');
+        const t = document.getElementById('bar-theta');
+        const a = document.getElementById('bar-alpha');
+        const b = document.getElementById('bar-beta');
+
+        if (mode === 'rest') {
+          this.updateBar('delta', 15);
+          this.updateBar('theta', 20);
+          this.updateBar('alpha', 45);
+          this.updateBar('beta', 20);
+        } else if (mode === 'focus') {
+          this.updateBar('delta', 10);
+          this.updateBar('theta', 25);
+          this.updateBar('alpha', 20);
+          this.updateBar('beta', 45);
+        } else if (mode === 'artifact') {
+          this.updateBar('delta', 60);
+          this.updateBar('theta', 20);
+          this.updateBar('alpha', 10);
+          this.updateBar('beta', 10);
+        }
+      }
+
+      updateBar(band, pct) {
+        const fill = document.getElementById(`bar-${band}`);
+        const label = document.getElementById(`p-${band}`);
+        if (fill) fill.style.width = `${pct}%`;
+        if (label) label.textContent = `${pct}%`;
+      }
+
+      /* ------------------------------------------------------------------------
+         GENERADOR DEL PERFIL NEUROCOGNITIVO Y MOTOR DE RECOMENDACIONES
+         ------------------------------------------------------------------------ */
+      calculateAndRefreshProfile() {
+        const att = this.state.attentionMetrics;
+        const mem = this.state.memoryMetrics;
+
+        const strengths = [];
+        const supportAreas = [];
+
+        // Análisis de Tarea de Atención
+        if (att.reactionTimes.length > 0) {
+          const avgRT = Math.round(att.reactionTimes.reduce((a, b) => a + b, 0) / att.reactionTimes.length);
+          const accuracy = Math.round((att.hits / (att.hits + att.misses)) * 100) || 0;
+
+          if (accuracy >= 80) {
+            strengths.push(`Alta precisión en discriminación de estímulos visuales objetivos (${accuracy}% aciertos).`);
+          } else {
+            supportAreas.push(`Se observó fatiga atencional progresiva o dispersión ante distractores visuales rápidos.`);
+          }
+
+          if (avgRT < 420) {
+            strengths.push(`Velocidad de procesamiento visomotor ágil (Tiempo de reacción promedio: ${avgRT} ms).`);
+          } else {
+            supportAreas.push(`Tiempos de latencia reflexivos o pausados (${avgRT} ms promedio). Te favorecen tareas sin presión de tiempo.`);
+          }
+        }
+
+        // Análisis de Memoria de Trabajo
+        if (mem.maxSpanReached > 0) {
+          if (mem.maxSpanReached >= 5) {
+            strengths.push(`Excelente capacidad de retención en span de memoria secuencial visoespacial (${mem.maxSpanReached} elementos).`);
+          } else {
+            supportAreas.push(`Capacidad operativa óptima en bloques cortos (${mem.maxSpanReached} elementos). Se beneficia de segmentación paso a paso.`);
+          }
+        }
+
+        // Renderizado en DOM
+        const sList = document.getElementById('profile-strengths-list');
+        const supList = document.getElementById('profile-support-list');
+
+        if (strengths.length > 0) {
+          sList.innerHTML = strengths.map(s => `<li>${s}</li>`).join('');
+        }
+        if (supportAreas.length > 0) {
+          supList.innerHTML = supportAreas.map(sa => `<li>${sa}</li>`).join('');
+        }
+
+        // Síntesis algorítmica textual (con salvaguardas éticas)
+        const aiText = document.getElementById('ai-synthesis-text');
+        aiText.innerHTML = `
+          <strong>Interpretación descriptiva:</strong> Durante las pruebas observamos una respuesta con 
+          ${att.reactionTimes.length > 0 ? `latencia media de ${Math.round(att.reactionTimes.reduce((a,b)=>a+b,0)/att.reactionTimes.length)} ms` : 'datos atencionales preliminares'} 
+          y un span secuencial de ${mem.maxSpanReached || 3} posiciones. 
+          <em>Este patrón no representa un límite rígido ni diagnostica condición clínica</em>; 
+          sugiere que tu desempeño mejora cuando el entorno minimiza sobrecarga de información y organiza las instrucciones por etapas.
+        `;
+      }
+
+      loadSyntheticProfileDemo() {
+        this.toggleConsent(true);
+        document.getElementById('consent-checkbox').checked = true;
+
+        // Cargar datos ficticios
+        this.state.attentionMetrics = {
+          trialsTotal: 20,
+          currentTrial: 20,
+          hits: 13,
+          falseAlarms: 2,
+          misses: 1,
+          reactionTimes: [340, 365, 390, 410, 385, 370, 355, 420],
+          isRunning: false
+        };
+        this.state.memoryMetrics.maxSpanReached = 5;
+
+        this.calculateAndRefreshProfile();
+        this.navigateTo('view-profile');
+      }
+
+      resetSession() {
+        if (confirm('¿Deseas restablecer todos los registros locales de esta sesión?')) {
+          location.reload();
+        }
+      }
+    }
+
+    // Inicialización global accesible
+    const app = new NeuroIncludeApp();
+  </script>
+</body>
+</html>
